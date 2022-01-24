@@ -403,6 +403,7 @@ class ImageViewer(ViewerItem):
     def __init__(self, filepath: str) -> None:
         super().__init__(filepath)
         layout = QVBoxLayout()
+        layout.setContentsMargins(0,0,0,0)
 
         self.viewer = ImageViewport()
         if filepath.lower().endswith(".dds"):
@@ -456,12 +457,16 @@ class Viewer(QWidget):
     def handle_update_filepath(self, filepath: str) -> None:
         self.update_ui(filepath)
 
-    def update_ui(self, filepath: str) -> None:
+    def clear(self) -> None:
         layout = self.layout()
         while layout.count():
             child = layout.takeAt(0)
             if child.widget():
                 child.widget().deleteLater()
+
+    def update_ui(self, filepath: str) -> None:
+        layout = self.layout()
+        self.clear()
 
         if filepath:
             path = Path(filepath)
